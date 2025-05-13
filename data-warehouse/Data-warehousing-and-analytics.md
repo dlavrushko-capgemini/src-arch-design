@@ -1,25 +1,27 @@
-# Dataflow
-The data flows through the solution as follows:
+## Overview
+The infrastructure is designed to handle data from multiple sources and transform it into a structured format for analysis. The data flow begins with updates from various data sources being exported to a staging area in Azure Data Lake Storage. Azure Data Factory then incrementally loads this data into staging tables in Azure Synapse Analytics, where it is cleansed and transformed. PolyBase is utilized to parallelize the process for large datasets. Once the data is loaded into the warehouse, an Azure Analysis Services tabular model is refreshed to simplify the analysis of business data and relationships. Business analysts use Microsoft Power BI to analyze the warehoused data via the Analysis Services semantic model.
 
-* For each data source, any updates are exported periodically into a staging area in Azure Data Lake Storage.
-* Azure Data Factory incrementally loads the data from Azure Data Lake Storage into staging tables in Azure Synapse Analytics. The data is cleansed and transformed during this process. PolyBase can parallelize the process for large datasets.
-* After loading a new batch of data into the warehouse, a previously created Azure Analysis Services tabular model is refreshed. This semantic model simplifies the analysis of business data and relationships.
-* Business analysts use Microsoft Power BI to analyze warehoused data via the Analysis Services semantic model.
+## Components
+The infrastructure includes several key components and their connections:
 
-# Components
-The company has data sources on many different platforms:
-
-* SQL Server on-premises
-* Oracle on-premises
-* Azure SQL Database
-* Azure table storage
-* Azure Cosmos DB
-  
-Data is loaded from these different data sources using several Azure components:
-
-* Azure Data Lake Storage is used to stage source data before it's loaded into Azure Synapse.
-* Data Factory orchestrates the transformation of staged data into a common structure in Azure Synapse. Data Factory uses PolyBase when loading data into Azure Synapse to maximize throughput.
-* Azure Synapse is a distributed system for storing and analyzing large datasets. Its use of massive parallel processing (MPP) makes it suitable for running high-performance analytics. Azure Synapse can use PolyBase to rapidly load data from Azure Data Lake Storage.
-* Analysis Services provides a semantic model for your data. It can also increase system performance when analyzing your data.
-* Power BI is a suite of business analytics tools to analyze data and share insights. Power BI can query a semantic model stored in Analysis Services, or it can query Azure Synapse directly.
-* Microsoft Entra ID authenticates users who connect to the Analysis Services server through Power BI. Data Factory can also use Microsoft Entra ID to authenticate to Azure Synapse via a service principal or Managed identity for Azure resources.
+1. Data Sources:
+   * SQL Server on-premises
+   * Oracle on-premises
+   * Azure SQL Database
+   * Azure Table Storage
+   * Azure Cosmos DB
+2. Azure Data Lake Storage:
+    * Stages source data before loading into Azure Synapse.
+3. Azure Data Factory:
+    * Orchestrates the transformation of staged data into a common structure in Azure Synapse.
+    * Uses PolyBase to maximize throughput when loading data into Azure Synapse.
+4. Azure Synapse Analytics:
+    * Distributed system for storing and analyzing large datasets.
+    * Utilizes massive parallel processing (MPP) for high-performance analytics.
+    * Uses PolyBase to rapidly load data from Azure Data Lake Storage.
+5. Azure Analysis Services:
+    * Provides a semantic model for data.
+    * Enhances system performance during data analysis.
+6. Microsoft Power BI:
+    * Suite of business analytics tools for data analysis and sharing insights.
+    * Queries semantic models stored in Analysis Services or directly queries Azure Synapse.
